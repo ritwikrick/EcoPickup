@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./server
+    ports:
+      - "8080:8080"
+    networks:
+      - eco_network
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/mydatabase
+    depends_on:
+      - mongodb
+
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    networks:
+      - eco_network
+    environment:
+      REACT_APP_API_URL: http://server:8080
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - eco_network
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  eco_network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
