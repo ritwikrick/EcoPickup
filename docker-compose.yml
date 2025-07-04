@@ -4,11 +4,15 @@ services:
   server:
     build: ./server
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
     networks:
       - eco_network
     environment:
-      MONGO_URI: mongodb://mongodb:27017/mydatabase
+      - PORT=${PORT}
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
     depends_on:
       - mongodb
 
@@ -19,7 +23,7 @@ services:
     networks:
       - eco_network
     environment:
-      REACT_APP_API_URL: http://server:8080
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
 
   mongodb:
     image: mongo:latest
